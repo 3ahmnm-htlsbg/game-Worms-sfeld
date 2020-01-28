@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   text: OwO
+  number: 1
 --- !u!136 &3416348
 CapsuleCollider:
   m_ObjectHideFlags: 0
