@@ -6,32 +6,41 @@ public class WormController : MonoBehaviour
 {
     public float strength;
     public float bulletForce;
+    public float speed = 5f;
+
     public GameObject worm;
     public GameObject ball;
+
+    //Input Keys
     public KeyCode rightKey;
     public KeyCode leftKey;
     public KeyCode jumpKey;
     public KeyCode triggerKey;
     public KeyCode gunUp;
     public KeyCode gunDown;
-    float speed = 5f;
+    
 
     private void Update()
     {
         Rigidbody WormRigidbody = worm.gameObject.GetComponent<Rigidbody>();
 
+        //moves player a set amount by vector mutiplicatin, as long as the move key is held down
+        worm.transform.position += MovePlayer();
+
+        //jumping by adding upwards force if a key is pressed
         Jump(WormRigidbody);
 
+        //shoot bullet if gun is fired
         if (Input.GetKeyDown(triggerKey))
         {
             ShootBall();
         }
-
-        worm.transform.position += MovePlayer();
-
+       
+        //rotate gun up or down
         Quaternion rotation = Quaternion.Euler(0, 0, rotateGun());
         worm.transform.GetChild(0).gameObject.transform.rotation *= rotation;
         
+        //old method of moving player by adding a force everytime a move key is pressed
         //moveWithForce(WormRigidbody);
     }
 
@@ -43,11 +52,13 @@ public class WormController : MonoBehaviour
         GameObject newball = Instantiate(ball, Gun.transform.position, Quaternion.identity);
         Rigidbody ballRigid = newball.gameObject.GetComponent<Rigidbody>();
 
+        //ajust bullet direction by looking at the gun roation
         float bally = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.x;
         float ballx = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.y;
 
         Vector3 bulletDirection = new Vector3(ballx, -bally , 0);
         Debug.Log("bullet direction: " + bulletDirection + "current Rotation: " + gunPivot.transform.up);
+
         ballRigid.AddForce(bulletDirection * bulletForce);
     }
 
@@ -65,11 +76,11 @@ public class WormController : MonoBehaviour
     {
         if (Input.GetKey(rightKey))
         {
-
             Debug.Log("Move Right");
 
             rigid.AddForce(transform.right * strength, ForceMode.Acceleration);
         }
+
         if (Input.GetKey(leftKey))
         {
             Debug.Log("Move Left");
@@ -92,9 +103,9 @@ public class WormController : MonoBehaviour
 
             return moveAmount;
         }
+
         else if (Input.GetKey(leftKey))
-        {
-            
+        {         
             Vector3 input = new Vector3(-1, 0, 0);
             Vector3 direction = input.normalized;
             Vector3 velocity = direction * speed;
@@ -103,9 +114,9 @@ public class WormController : MonoBehaviour
 
             worm.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            return moveAmount;
-            
+            return moveAmount;   
         }
+
         else
         {
             return new Vector3(0, 0, 0);
