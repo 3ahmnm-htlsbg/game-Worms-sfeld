@@ -14,25 +14,25 @@ public class WormController : MonoBehaviour
     public KeyCode triggerKey;
     public KeyCode gunUp;
     public KeyCode gunDown;
-
     float speed = 5f;
 
     private void Update()
     {
-        
         Rigidbody WormRigidbody = worm.gameObject.GetComponent<Rigidbody>();
 
-        worm.transform.position += MovePlayer();
-        Quaternion rotation = Quaternion.Euler(0, 0, rotateGun());
-        worm.transform.GetChild(0).gameObject.transform.rotation *= rotation;
-
-        //moveWithForce(WormRigidbody);
         Jump(WormRigidbody);
+
         if (Input.GetKeyDown(triggerKey))
         {
             ShootBall();
         }
+
+        worm.transform.position += MovePlayer();
+
+        Quaternion rotation = Quaternion.Euler(0, 0, rotateGun());
+        worm.transform.GetChild(0).gameObject.transform.rotation *= rotation;
         
+        //moveWithForce(WormRigidbody);
     }
 
     private void ShootBall()
@@ -42,8 +42,12 @@ public class WormController : MonoBehaviour
 
         GameObject newball = Instantiate(ball, Gun.transform.position, Quaternion.identity);
         Rigidbody ballRigid = newball.gameObject.GetComponent<Rigidbody>();
-        Vector3 bulletDirection = new Vector3((worm.transform.rotation.eulerAngles.y/ 90) - 1, 0, gunPivot.transform.rotation.eulerAngles.z / 180);
-        Debug.Log("bullet direction: " + bulletDirection + "current Rotation: " + worm.transform.rotation.eulerAngles);
+
+        float bally = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.x;
+        float ballx = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.y;
+
+        Vector3 bulletDirection = new Vector3(ballx, -bally , 0);
+        Debug.Log("bullet direction: " + bulletDirection + "current Rotation: " + gunPivot.transform.up);
         ballRigid.AddForce(bulletDirection * bulletForce);
     }
 
