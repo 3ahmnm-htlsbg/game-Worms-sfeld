@@ -40,19 +40,22 @@ public class WormController : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0, 0, rotateGun());
         worm.transform.GetChild(0).gameObject.transform.rotation *= rotation;
         
+
         //old method of moving player by adding a force everytime a move key is pressed
         //moveWithForce(WormRigidbody);
     }
 
     private void ShootBall()
-    {
+    {   
+        //get the required gameobjects
         GameObject Gun = worm.transform.GetChild(0).GetChild(1).gameObject;
         GameObject gunPivot = worm.transform.GetChild(0).gameObject;
 
+        //Insatntiate a new bullet and get its rigidbody
         GameObject newball = Instantiate(ball, Gun.transform.position, Quaternion.identity);
         Rigidbody ballRigid = newball.gameObject.GetComponent<Rigidbody>();
 
-        //ajust bullet direction by looking at the gun roation
+        //calculate the bullet force acording to the current gun roation
         float bally = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.x;
         float ballx = ((worm.transform.rotation.eulerAngles.y / 90) - 1) * gunPivot.transform.up.y;
 
@@ -74,6 +77,8 @@ public class WormController : MonoBehaviour
 
     void moveWithForce(Rigidbody rigid)
     {
+        // This looked kinda strange so it's not actually used
+        // but no worrys, its here
         if (Input.GetKey(rightKey))
         {
             Debug.Log("Move Right");
@@ -99,6 +104,7 @@ public class WormController : MonoBehaviour
             Vector3 moveAmount = velocity * Time.deltaTime;
             Debug.Log("Move Right by " + moveAmount);
 
+            //Set roation so the player looks in the direction they're moving in
             worm.transform.rotation = Quaternion.Euler(0, 180, 0);
 
             return moveAmount;
@@ -112,13 +118,14 @@ public class WormController : MonoBehaviour
             Vector3 moveAmount = velocity * Time.deltaTime;
             Debug.Log("Move Left by " + moveAmount);
 
+            //same deal as before
             worm.transform.rotation = Quaternion.Euler(0, 0, 0);
 
             return moveAmount;   
         }
 
         else
-        {
+        {       
             return new Vector3(0, 0, 0);
         }
     }
@@ -126,7 +133,7 @@ public class WormController : MonoBehaviour
     float rotateGun()
     {
         GameObject Gun = worm.transform.GetChild(0).gameObject;
-
+        // works like the MovePlayer function, just with roation instread
         if (Input.GetKey(gunUp)) {
 
             float rotationSpeed = 180f;
