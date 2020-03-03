@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WormController : MonoBehaviour
 {
     public float strength;
     public float bulletForce;
     public float speed = 5f;
+    public int WormHealth = 5;
 
     public GameObject worm;
     public GameObject ball;
+    public Text healthText;
 
     //Input Keys
     public KeyCode rightKey;
@@ -39,10 +42,39 @@ public class WormController : MonoBehaviour
         //rotate gun up or down
         Quaternion rotation = Quaternion.Euler(0, 0, rotateGun());
         worm.transform.GetChild(0).gameObject.transform.rotation *= rotation;
-        
+
+        DisplayHealth();
 
         //old method of moving player by adding a force everytime a move key is pressed
         //moveWithForce(WormRigidbody);
+    }
+
+    
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "DamageSource")
+        {
+            Debug.Log("you got shot");
+            WormHealth -= 1;
+        }
+        else if (collision.gameObject.tag == "RespawnZone")
+        {
+            worm.transform.position = new Vector3(0, 0, 0);
+            Debug.Log("you have fallen");
+        }
+        else if  (collision.gameObject.tag == "HelfItem") {
+
+            Debug.Log("You just got healed");
+            WormHealth += 5;
+            Destroy(collision.gameObject);
+            
+        }
+        else
+        {
+            Debug.Log("something else");
+        }
+
     }
 
     private void ShootBall()
@@ -153,6 +185,12 @@ public class WormController : MonoBehaviour
         {
             return 0f;
         }
+
+    }
+
+    void DisplayHealth()
+    {
+        healthText.text = "Health: " + WormHealth.ToString();
 
     }
 }
