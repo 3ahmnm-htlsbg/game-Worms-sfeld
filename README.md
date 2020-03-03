@@ -1,3 +1,4 @@
+
 # game-worms-sfeld
 
 ### Project description:
@@ -35,7 +36,7 @@ Everything that is suppoed to be there is there but it still feels kinda bland a
 
 ### Limitations: 
 
-
+ - not being able to spell basuka? bazoka?? bazooca?????
 
 ### Lessons Learned: 
 
