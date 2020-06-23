@@ -20,6 +20,8 @@ public class ItenSpawn : MonoBehaviour
         }
     }
 
+    //INVOKE
+
     private void Update()
     {
         print(WormController.itemAmmount);
